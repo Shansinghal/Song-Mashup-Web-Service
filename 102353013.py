@@ -23,6 +23,21 @@ def download_audio(singer, n):
     query = f"{singer} song"
     output_template = "temp_audio/%(title)s.%(ext)s"
     ffmpeg_path = imageio_ffmpeg.get_ffmpeg_exe()
+    
+    # Check for cookies.txt
+    cookies_path = "cookies.txt"
+    if not os.path.exists(cookies_path):
+        # Fallback to an environment variable if provided (for deployment)
+        if os.environ.get("YOUTUBE_COOKIES"):
+            with open(cookies_path, "w") as f:
+                f.write(os.environ.get("YOUTUBE_COOKIES"))
+        else:
+            cookies_path = None
+    
+    if cookies_path:
+        print(f"DEBUG: Using cookies from {cookies_path}")
+    else:
+        print("DEBUG: No cookies found. YouTube might block requests.")
 
     # Phase 1: Search and filter
     print(f"Searching for short videos of {singer}...")
@@ -30,6 +45,8 @@ def download_audio(singer, n):
         'quiet': True,
         'extract_flat': True,
         'force_generic_extractor': False,
+        'cookiefile': cookies_path,
+        'http_headers': {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
     }
     
     valid_urls = []
@@ -84,6 +101,8 @@ def download_audio(singer, n):
             'preferredcodec': 'mp3',
             'preferredquality': '192',
         }],
+        'cookiefile': cookies_path,
+        'http_headers': {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
     }
 
     with YoutubeDL(ydl_opts) as ydl:
