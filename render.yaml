@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: song-mashup-service
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn mashup_web.app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
