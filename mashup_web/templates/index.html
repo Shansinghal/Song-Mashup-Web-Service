@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Mashup Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>YouTube Mashup Generator</h1>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flashes">
+              {% for category, message in messages %}
+                <div class="alert {{ category }}">{{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="/">
+            <div class="form-group">
+                <label for="singer">Singer Name</label>
+                <input type="text" id="singer" name="singer" required placeholder="e.g. The Weeknd">
+            </div>
+
+            <div class="form-group">
+                <label for="n_videos">Number of Videos</label>
+                <input type="number" id="n_videos" name="n_videos" min="1" max="20" required placeholder="10">
+            </div>
+
+            <div class="form-group">
+                <label for="duration">Duration (seconds)</label>
+                <input type="number" id="duration" name="duration" min="5" max="60" required placeholder="20">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email ID</label>
+                <input type="email" id="email" name="email" required placeholder="your.email@example.com">
+            </div>
+
+            <button type="submit" id="submitBtn">Generate Mashup</button>
+        </form>
+        
+        <script>
+            const form = document.querySelector('form');
+            const btn = document.getElementById('submitBtn');
+            form.addEventListener('submit', () => {
+                btn.disabled = true;
+                btn.innerText = "Processing... Please Wait";
+            });
+        </script>
+    </div>
+</body>
+</html>
