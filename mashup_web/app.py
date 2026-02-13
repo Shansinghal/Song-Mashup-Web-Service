@@ -79,7 +79,9 @@ def index():
             
             if result.returncode != 0:
                 logging.error(f"Error creating mashup: {result.stderr}")
-                flash(f"Error creating mashup: {result.stderr}", "error")
+                # Combine stdout and stderr for the user as the script uses print() for errors
+                error_message = f"{result.stderr}\nOutput: {result.stdout}"
+                flash(f"Error creating mashup: {error_message}", "error")
                 return redirect(url_for("index"))
 
             output_path = os.path.join(parent_dir, output_filename)

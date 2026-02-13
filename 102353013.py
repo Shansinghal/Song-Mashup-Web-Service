@@ -185,6 +185,7 @@ def main():
             print(f"Mashup created successfully: {output_file}")
         else:
             print("Mashup creation failed: No audio processed.")
+            sys.exit(1)
     except Exception as e:
         print(f"An error occurred: {e}")
         traceback.print_exc()
